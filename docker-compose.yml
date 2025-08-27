@@ -1,0 +1,9 @@
+services:
+  novnc:
+    build: .
+    container_name: novnc
+    ports:
+      - "6080:6080"
+    environment:
+      RESOLUTION: "1920x1080"
+    restart: unless-stopped
