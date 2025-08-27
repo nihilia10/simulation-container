@@ -29,6 +29,14 @@ ENV RESOLUTION=1920x1080
 # Expose VNC port
 EXPOSE 5901
 
+# noVNC + websockify
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    novnc websockify python3 \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Puerto web de noVNC
+EXPOSE 6080
+
 # Set the working directory in the container
 WORKDIR /app
 
@@ -36,5 +44,4 @@ WORKDIR /app
 COPY start-vnc.sh start-vnc.sh
 RUN chmod +x start-vnc.sh
 
-# List the contents of the /app directory
-RUN ls -a /app
+CMD ["./start-vnc.sh"]
