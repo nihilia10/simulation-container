@@ -37,8 +37,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Puerto web de noVNC
 EXPOSE 6080
 
-# Set the working directory in the container
-WORKDIR /app
+# Carpeta de trabajo donde quieres persistir archivos
+ENV WORKSPACE=/workspace
+RUN mkdir -p $WORKSPACE
+
+# Opcional: que todo lo que hagas por defecto sea ahí
+WORKDIR $WORKSPACE
 
 # Copy a script to start the VNC server
 COPY start-vnc.sh start-vnc.sh
