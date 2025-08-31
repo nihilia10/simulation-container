@@ -6,4 +6,9 @@ services:
       - "6080:6080"
     environment:
       RESOLUTION: "1920x1080"
+    volumes:
+      - main_volume:/workspace
     restart: unless-stopped
+
+volumes:
+  main_volume:
