@@ -3,13 +3,20 @@ This repo has the objective to allow other users to control a container (server)
 
 In this way multiple persons can work asynchronously in a simulation.
 
+## Key features
+- A ubuntu machine with graphic service easily sharable with your collaborators.
+- Copy and paste between your local machine and the server
+- Persistency on the `workspace` directory 
+
 ## Requirements
 
 - docker
 
 
-## Build Up
-`sudo docker compose up -d --build`
+## Running
+1. Run `sudo docker compose up -d --build`. The noVNC server will be running on port 6080.
+2. Use a tool to tunnel your port to the internet (i.e. VSCode Ports). Share the link with your collaborators.
+3. Open the noVNC and authenticate with your password.
 
 ## Tear Down
 `sudo docker compose down`
