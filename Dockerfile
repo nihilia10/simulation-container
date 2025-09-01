@@ -13,12 +13,26 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tightvncserver \
     dbus-x11 \
     xfonts-base \
+    autocutsel xclip xfce4-clipman xauth \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Setup VNC server
 RUN mkdir /root/.vnc \
     && echo "password" | vncpasswd -f > /root/.vnc/passwd \
     && chmod 600 /root/.vnc/passwd
+
+# Crear xstartup para XFCE + clipboard sync
+RUN printf '%s\n' \
+  '#!/bin/sh' \
+  'xrdb $HOME/.Xresources' \
+  'startxfce4 &' \
+  'autocutsel -fork -selection PRIMARY' \
+  'autocutsel -fork -selection CLIPBOARD' \
+  > /root/.vnc/xstartup && chmod +x /root/.vnc/xstartup
+
+RUN mkdir -p /root/.config/autostart && \
+printf '[Desktop Entry]\nType=Application\nName=Clipman\nExec=xfce4-clipman\n' \
+    > /root/.config/autostart/clipman.desktop
 
 # Create an .Xauthority file
 RUN touch /root/.Xauthority
