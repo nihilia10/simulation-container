@@ -14,4 +14,15 @@ echo "VNC server started at $RESOLUTION!"
 echo "Starting noVNC server..."
 exec websockify --web=/usr/share/novnc 0.0.0.0:6080 localhost:5901
 NOVNC_PID=$!
+
+if [ "${START_GAZEBO:-0}" = "1" ]; then
+  if [ -n "${WORLD_FILE:-}" ]; then
+    gazebo "$WORLD_FILE" >/tmp/gazebo.log 2>&1 &
+  else
+    gazebo >/tmp/gazebo.log 2>&1 &
+  fi
+fi
+
+
+
 wait $NOVNC_PID

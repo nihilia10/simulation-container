@@ -1,10 +1,35 @@
 # Use an official Ubuntu base image
-FROM ubuntu:20.04
-
+#FROM ubuntu:20.04
+FROM osrf/ros:jazzy-desktop
+ARG ROS_DISTRO=jazzy
+ARG GZ_DIST=harmonic
 # Avoid warnings by switching to noninteractive for the build process
 ENV DEBIAN_FRONTEND=noninteractive
 
 ENV USER=root
+
+# ROS - Gazebo Utils
+RUN apt-get update && apt-get install -y \
+    wget gnupg lsb-release sudo curl git mesa-utils \
+ && rm -rf /var/lib/apt/lists/*
+
+# Repo OSRF Gazebo
+RUN wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/gazebo-archive-keyring.gpg && \
+    bash -lc 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gazebo-archive-keyring.gpg] \
+    http://packages.osrfoundation.org/gazebo/ubuntu-stable $(. /etc/os-release && echo $UBUNTU_CODENAME) main" \
+    > /etc/apt/sources.list.d/gazebo-stable.list'
+
+# Gazebo (meta) + puente ROS<->GZ
+RUN apt-get update && apt-get install -y \
+    gz-${GZ_DIST} \
+    ros-${ROS_DISTRO}-ros-gz \
+ && rm -rf /var/lib/apt/lists/*
+
+# Paths de recursos (genéricos)
+ENV GZ_SIM_RESOURCE_PATH=/usr/share/gz:/usr/share/gz-${GZ_DIST}:/usr/share/${GZ_DIST}:/usr/share
+
+# Validación (no GUI)
+RUN gz sim --help >/dev/null
 
 # Install XFCE, VNC server, dbus-x11, and xfonts-base
 RUN apt-get update && apt-get install -y --no-install-recommends \
