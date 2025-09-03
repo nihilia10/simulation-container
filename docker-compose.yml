@@ -1,6 +1,7 @@
 services:
   novnc:
     build: .
+    platform: linux/amd64
     container_name: novnc
     ports:
       - "6080:6080"

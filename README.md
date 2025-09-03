@@ -10,7 +10,8 @@ In this way multiple persons can work asynchronously in a simulation.
 
 ## Requirements
 
-- docker
+- docker (open it please and keep it running)
+
 
 
 ## Running
